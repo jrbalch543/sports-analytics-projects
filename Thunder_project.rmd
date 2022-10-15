@@ -1,0 +1,42 @@
+---
+title: "Thunder Project"
+author: "Jackson Balch"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(readxl)
+library(dplyr)
+```
+## Submission
+
+Here is my submission. Please let me know if you have any questions and I'd be happy to answer them!
+Thank you for the opportunity!
+
+```{r}
+thunder_data <- read_excel("C:/Users/jrbal/Downloads/thunder_data.xlsx")
+thunder_data_w_dist <- thunder_data %>%
+  mutate(shot_distance = sqrt(x^2 + y^2))
+
+thunder_data_w_dist_and_type <- thunder_data_w_dist %>%
+  mutate(shot_type = ifelse(shot_distance > 23.75, "Non-corner 3P", ifelse(y < 7.8, ifelse(abs(x) > 22, "Corner 3P", "2P"), "2P")), 
+         fgmadeEfg = ifelse(shot_type == "2P", fgmade, fgmade * 1.5))
+
+efg <- thunder_data_w_dist_and_type %>%
+  group_by(team, shot_type) %>%
+  summarise(`EFG%` = sum(fgmadeEfg)/length(fgmadeEfg))
+
+team_shots <- thunder_data_w_dist_and_type %>%
+  group_by(team)%>%
+  mutate(total_shots = length(team))
+
+shot_distr <- team_shots %>%
+  group_by(shot_type, team) %>%
+  summarise(shot_distribution = length(shot_type)/mean(total_shots))
+
+
+output <- merge(x = efg, y = shot_distr, by = c("team", "shot_type"))
+output
+```
+

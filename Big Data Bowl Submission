@@ -2,15 +2,15 @@
  "cells": [
   {
    "cell_type": "markdown",
-   "id": "11bb4e28",
+   "id": "0422ff46",
    "metadata": {
     "_cell_guid": "b1076dfc-b9ad-4769-8c92-a6c4dae69d19",
     "_uuid": "8f2839f25d086af736a60e9eeb907d3b93b6e0e5",
     "papermill": {
-     "duration": 0.003084,
-     "end_time": "2023-01-07T11:53:52.451737",
+     "duration": 0.003032,
+     "end_time": "2023-01-07T11:56:18.035661",
      "exception": false,
-     "start_time": "2023-01-07T11:53:52.448653",
+     "start_time": "2023-01-07T11:56:18.032629",
      "status": "completed"
     },
     "tags": []
@@ -37,13 +37,13 @@
   },
   {
    "cell_type": "markdown",
-   "id": "cdcf32b1",
+   "id": "0502e808",
    "metadata": {
     "papermill": {
-     "duration": 0.00178,
-     "end_time": "2023-01-07T11:53:52.455577",
+     "duration": 0.001792,
+     "end_time": "2023-01-07T11:56:18.039621",
      "exception": false,
-     "start_time": "2023-01-07T11:53:52.453797",
+     "start_time": "2023-01-07T11:56:18.037829",
      "status": "completed"
     },
     "tags": []
@@ -52,13 +52,13 @@
   },
   {
    "cell_type": "markdown",
-   "id": "7dac0a56",
+   "id": "059404cd",
    "metadata": {
     "papermill": {
-     "duration": 0.001668,
-     "end_time": "2023-01-07T11:53:52.459058",
+     "duration": 0.001648,
+     "end_time": "2023-01-07T11:56:18.043148",
      "exception": false,
-     "start_time": "2023-01-07T11:53:52.457390",
+     "start_time": "2023-01-07T11:56:18.041500",
      "status": "completed"
     },
     "tags": []
@@ -80,6 +80,7 @@
     "library(png)\n",
     "library(gifski)\n",
     "library(knitr)\n",
+    "library(kableExtra)\n",
     "```\n",
     "\n",
     "## Big Data Bowl 2023\n",
@@ -495,14 +496,14 @@
   },
   "papermill": {
    "default_parameters": {},
-   "duration": 4.009408,
-   "end_time": "2023-01-07T11:53:52.583051",
+   "duration": 3.829238,
+   "end_time": "2023-01-07T11:56:18.164829",
    "environment_variables": {},
    "exception": null,
    "input_path": "__notebook__.ipynb",
    "output_path": "__notebook__.ipynb",
    "parameters": {},
-   "start_time": "2023-01-07T11:53:48.573643",
+   "start_time": "2023-01-07T11:56:14.335591",
    "version": "2.4.0"
   }
  },

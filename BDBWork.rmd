@@ -14,6 +14,7 @@ library(gganimate)
 library(png)
 library(gifski)
 library(knitr)
+library(kableExtra)
 ```
 
 ## Big Data Bowl 2023
@@ -132,7 +133,8 @@ I now apply this function to my data frame to get a vector of distances, which I
 ```{r distFromQB apply}
 qb_dist_test <- apply(test_join, MARGIN = 1, FUN = distFromQB)
 new_test <- cbind(test_join, qb_dist_test)
-head(kable(new_test))
+kable(new_test)%>%
+  scroll_box(width = "700px", height = "400px")
 ```
 
 This test sequence works in providing distance from the QB, but due to the sample size as one play, I don't get any expected values since all my expected values are the actual ones I find.
@@ -186,8 +188,6 @@ Finally, now that for each row in the data frame of lineman location I have the 
 ```{r week1 distFromQB}
 joined_with_dist <- joined %>%
   mutate(distance_from_QB = sqrt((x.normal - x.qb)^2 + (y.normal - y.qb)^2))
-
-head(kable(joined_with_dist))
 ```
 I now have calculated the distance away from the QB for each player.
 
@@ -208,7 +208,8 @@ Sweet. Let's double check that worked:
 test <- data_with_avg_dist %>%
   filter(frameId == 6)
 
-head(kable(test))
+kable(test)%>%
+  scroll_box(width = "500px", height = "200px")
 ```
 Whoop!  
 
@@ -223,7 +224,8 @@ data_with_avg_dist_and_diff <- data_with_avg_dist %>%
 test <- data_with_avg_dist_and_diff %>%
   filter(playId == 1419)
 
-head(test)
+kable(test)%>%
+  scroll_box(width = "500px", height = "200px")
 ```
 
 Looks like it worked!
@@ -235,11 +237,12 @@ I'll make a summary table to see the leaders for the week:
 ```{r summary}
 kable(data_with_avg_dist_and_diff %>%
   ungroup()%>%
+  filter(officialPosition != "QB") %>%
   group_by(displayName) %>%
   summarise(AYLAE = mean(YLAE)) %>%
   filter(!is.na(AYLAE)) %>%
   arrange(AYLAE))%>%
-  scroll_box(width = "500px", height = "200px")
+  scroll_box(width = "700px", height = "400px")
 ```
 
 It looks like Erik McCoy, Duane Brown, and Rodney Hudson were the best OL of the week. This makes sense to me, as Erik McCoy was named to the All-Rookie Team, Duane Brown is a multi-time Pro-Bowler and All-Pro, and Rodney Hudson is also a multi-time Pro-Bowler. It appears as though my AYLAE metric seems to be having some success in demonstrating great lineman performance! Garrett Bradbury, Calvin Throckmorton, and J.C. Hassennauer are my lowest rated linemen, which also makes sense as these three appeared to be rotational linemen at this point.
@@ -311,36 +314,29 @@ This above function returns my data frame I created so that I can make a summary
 ```{r getAYLAE func}
 getAYLAE <- function(week){
   data_with_avg_dist_and_diff <- getMutData(week)
-  data_with_avg_dist_and_diff %>%
-    ungroup() %>%
+  kable(data_with_avg_dist_and_diff %>%
+    ungroup()%>%
+    filter(officialPosition != "QB") %>%
     group_by(displayName) %>%
-    filter(isQB == FALSE && officialPosition != 'QB') %>%
-    summarise(Position = unique(officialPosition), Team = unique(team.normal), AYLAE = mean(YLAE, na.rm = TRUE), Plays = n_distinct(playId)) %>%
-    arrange(AYLAE)
+    summarise(AYLAE = mean(YLAE)) %>%
+    filter(!is.na(AYLAE)) %>%
+    arrange(AYLAE))%>%
+    scroll_box(width = "700px", height = "400px")
 }
 ```
 
 Now, let's apply that to all the weeks and the allweeks data frames:
 
 ```{r getAYLAE apply, warning=FALSE}
-kable(getAYLAE(week1))%>%
-  scroll_box(width = "500px", height = "200px")
-kable(getAYLAE(week2))%>%
-  scroll_box(width = "500px", height = "200px")
-kable(getAYLAE(week3))%>%
-  scroll_box(width = "500px", height = "200px")
-kable(getAYLAE(week4))%>%
-  scroll_box(width = "500px", height = "200px")
-kable(getAYLAE(week5))%>%
-  scroll_box(width = "500px", height = "200px")
-kable(getAYLAE(week6))%>%
-  scroll_box(width = "500px", height = "200px")
-kable(getAYLAE(week7))%>%
-  scroll_box(width = "500px", height = "200px")
-kable(getAYLAE(week8))%>%
-  scroll_box(width = "500px", height = "200px")
-kable(getAYLAE(allweeks))%>%
-  scroll_box(width = "500px", height = "200px")
+getAYLAE(week1)
+getAYLAE(week2)
+getAYLAE(week3)
+getAYLAE(week4)
+getAYLAE(week5)
+getAYLAE(week6)
+getAYLAE(week7)
+getAYLAE(week8)
+getAYLAE(allweeks)
 ```
 
 I also wanted to make a specific one for players with over 150 snaps so that I don't get things super bogged down by linemen who played just a few snaps and can get a sense of how main starters or rotational players have fared:
@@ -355,7 +351,7 @@ kable(data_with_avg_dist_and_diff %>%
     summarise(Position = unique(officialPosition), Team = unique(team.normal), AYLAE = mean(YLAE, na.rm = TRUE), Plays = n_distinct(playId)) %>%
     filter(Plays > 150) %>%
     arrange(AYLAE))%>%
-  scroll_box(width = "500px", height = "200px")
+  scroll_box(width = "700px", height = "400px")
 ```
 Look at that Jags Line! I know Cam Robinson has had a bit of a breakout the past few years and Brandon Linder has been one of the league's premier guards for a while as well. I will say however that I am shocked to see a majority of the Buccaneers O-Line in the bottom here. I think that may be due to Brady's immobile pocket-passing, as where younger, more mobile QBs will move more to create more space, Brady is willing to stand in to deliver a pass. This can't change though, as if I group_by QB as well, now I'll have the linemen compared to their teammates, which is a completely different (yet also useful!) stat that can evaluate relative performance across a team. 
 
